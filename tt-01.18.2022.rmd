@@ -60,13 +60,17 @@ chocolate %>%
 
 chocolate %>% 
   slice_max(rating, n = 1) %>% 
-  group_by(company_manufacturer,
-           country_of_bean_origin) %>% 
-  ggplot(aes(country_of_bean_origin)) +
-  geom_bar(aes(fill = country_of_bean_origin
-               ),
+  group_by(country_of_bean_origin) %>%
+  summarise("Count" = n()) %>% 
+  slice_max(Count, n = 10) %>%
+  arrange(desc(Count)) %>% 
+  ggplot(aes(fct_reorder(country_of_bean_origin, Count), Count)) +
+  geom_col(aes(fill = country_of_bean_origin),
            show.legend = FALSE) +
-  coord_flip()
+  coord_flip() +
+  labs(x = "",
+       y = "Number of 4 Rated Chocolates",
+       title = "Top Producing Countries of Fine Chocolate")
   
 
 ```
